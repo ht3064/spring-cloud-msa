@@ -21,8 +21,8 @@ public class WebSecurityConfig {
         http.authorizeHttpRequests(
                 auth ->
                         auth
-                                .requestMatchers("/members").permitAll()
-                                .requestMatchers("/health_check").permitAll());
+                                .requestMatchers("/user-service/members").permitAll()
+                                .requestMatchers("/user-service/health_check").permitAll());
 
         http.headers((headers) -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
 

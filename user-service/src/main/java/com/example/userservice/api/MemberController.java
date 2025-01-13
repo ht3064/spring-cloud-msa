@@ -20,24 +20,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class MemberController {
-    private Environment env;
+    private final Environment env;
     private final MemberService memberService;
 
     @Autowired
     private Greeting greeting;
 
-    @GetMapping("/health_check")
+    @GetMapping("/user-service/health_check")
     public String status() {
-        return "It's Working in User Service.";
+        return String.format("It's Working in User Service on PORT %S", env.getProperty("local.server.port"));
     }
 
-    @GetMapping("/welcome")
+    @GetMapping("/user-service/welcome")
     public String welcome() {
 //        return env.getProperty("greeting.message");
         return greeting.getMessage();
     }
 
-    @PostMapping("/members")
+    @PostMapping("/user-service/members")
     public ResponseEntity<ResponseMemberDto> createMember(@RequestBody RequestMemberDto requestMemberDto) {
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
@@ -45,7 +45,7 @@ public class MemberController {
         MemberDto memberDto = mapper.map(requestMemberDto, MemberDto.class);
         memberService.createMember(memberDto);
 
-        ResponseMemberDto responseMemberDto = mapper.map(requestMemberDto, ResponseMemberDto.class);
+        ResponseMemberDto responseMemberDto = mapper.map(memberDto, ResponseMemberDto.class);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseMemberDto);
     }
