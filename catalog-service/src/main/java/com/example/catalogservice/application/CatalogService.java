@@ -1,4 +1,4 @@
-package com.example.catalogservice.service;
+package com.example.catalogservice.application;
 
 import com.example.catalogservice.domain.Catalog;
 

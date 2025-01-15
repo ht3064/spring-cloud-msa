@@ -1,8 +1,8 @@
-package com.example.catalogservice.controller;
+package com.example.catalogservice.api;
 
 import com.example.catalogservice.domain.Catalog;
 import com.example.catalogservice.dto.ResponseCatalogDto;
-import com.example.catalogservice.service.CatalogService;
+import com.example.catalogservice.application.CatalogService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.core.env.Environment;

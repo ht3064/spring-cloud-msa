@@ -1,8 +1,7 @@
-package com.example.catalogservice.service;
+package com.example.catalogservice.application;
 
 import com.example.catalogservice.dao.CatalogRepository;
 import com.example.catalogservice.domain.Catalog;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
