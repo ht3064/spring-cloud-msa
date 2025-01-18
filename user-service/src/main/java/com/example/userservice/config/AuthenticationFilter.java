@@ -4,6 +4,8 @@ import com.example.userservice.application.MemberService;
 import com.example.userservice.dto.MemberDto;
 import com.example.userservice.dto.RequestLoginDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,6 +21,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Objects;
 
 @Slf4j
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -56,5 +60,15 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
             Authentication authResult) throws IOException, ServletException {
         String username = ((User) authResult.getPrincipal()).getUsername();
         MemberDto memberDetails = memberService.getMemberDetailsByEmail(username);
+
+        String token = Jwts.builder()
+                .setSubject(memberDetails.getMemberId())
+                .setExpiration(new Date(System.currentTimeMillis() +
+                        Long.parseLong(Objects.requireNonNull(env.getProperty("token.expiration_time")))))
+                .signWith(Keys.hmacShaKeyFor(Objects.requireNonNull(env.getProperty("token.secret")).getBytes()))
+                .compact();
+
+        response.addHeader("token", token);
+        response.addHeader("userId", memberDetails.getMemberId());
     }
 }
