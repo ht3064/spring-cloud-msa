@@ -7,6 +7,8 @@ import com.example.userservice.dto.ResponseOrderDto;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,9 +20,26 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
-
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Member member = memberRepository.findByEmail(username);
+
+        if (member == null) {
+            throw new UsernameNotFoundException(username);
+        }
+
+        return new User(
+                member.getEmail(),
+                member.getEncryptedPwd(),
+                true,
+                true,
+                true,
+                true,
+                new ArrayList<>());
+    }
 
     @Override
     public void createMember(MemberDto memberDto) {
