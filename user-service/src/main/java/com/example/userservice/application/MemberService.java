@@ -8,4 +8,6 @@ public interface MemberService extends UserDetailsService {
     void createMember(MemberDto memberDto);
     MemberDto getMemberByMemberId(String memberId);
     Iterable<Member> getMemberByAll();
+
+    MemberDto getMemberDetailsByEmail(String username);
 }

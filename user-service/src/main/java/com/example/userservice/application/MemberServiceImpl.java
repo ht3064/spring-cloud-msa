@@ -73,4 +73,15 @@ public class MemberServiceImpl implements MemberService {
     public Iterable<Member> getMemberByAll() {
         return memberRepository.findAll();
     }
+
+    @Override
+    public MemberDto getMemberDetailsByEmail(String email) {
+        Member member = memberRepository.findByEmail(email);
+
+        if (member == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+
+        return new ModelMapper().map(member, MemberDto.class);
+    }
 }
